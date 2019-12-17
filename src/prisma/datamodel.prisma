@@ -9,6 +9,8 @@ type User {
   jobtitle: String
   bio: String
   profile: [ProfileField]!
+  recievedRequests: [Request]! @relation(name: "RecievedRequests")
+  sentRequests: [Request]! @relation(name: "SentRequests")
 }
 
 type ProfileField {
@@ -18,6 +20,12 @@ type ProfileField {
   type: ProfileFieldType!
   privacy: ProfileFieldPrivacy!
   preferredContact: Boolean @default(value: false)
+}
+
+type Request {
+  id: ID! @id
+  sender: User! @relation(name: "SentRequests")
+  recipient: User! @relation(name: "RecievedRequests")
 }
 
 enum ProfileFieldType {

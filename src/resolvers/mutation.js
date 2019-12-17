@@ -1,3 +1,5 @@
+const pubsub = require('./pubsub')
+
 const mutationSuccess = (code, message, fields) => ({
   code,
   message,
@@ -172,6 +174,20 @@ const Mutation = {
       return mutationSuccess(204, 'User fields deleted successfully.', {
         profileFields
       });
+    } catch (error) {
+      return mutationError(error);
+    }
+  },
+  async requestSent(_, args, { dataSources: { prisma }, user}) {
+    pubsub.publish('REQUEST_SENT', { requestSent: args });
+    try {
+      const request = await prisma.createRequest({
+        sender: {connect:{id:user.id}},
+        recipient: {connect:{id:args.id}}
+      })
+      return mutationSuccess(201, 'Request sent successful.', {
+        request
+      })
     } catch (error) {
       return mutationError(error);
     }

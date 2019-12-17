@@ -12,6 +12,8 @@ const typeDefs = gql`
     jobtitle: String
     bio: String
     profile: [ProfileField]!
+    recievedRequests: [Request]!
+    sentRequests: [Request]!
   }
 
   type ProfileField {

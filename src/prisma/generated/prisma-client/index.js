@@ -13,6 +13,10 @@ var models = [
     embedded: false
   },
   {
+    name: "Request",
+    embedded: false
+  },
+  {
     name: "ProfileFieldType",
     embedded: false
   },

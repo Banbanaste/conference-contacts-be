@@ -38,6 +38,10 @@ const typeDefs = gql`
     Deletes multiple profile fields.
     """
     deleteProfileFields(ids: [ID]!): ProfileMutationsResponse
+    """
+    Sends request
+    """
+    requestSent(id: ID!): RequestResponse
   }
 
   input CreateUserInput {
@@ -118,6 +122,13 @@ const typeDefs = gql`
     success: Boolean!
     message: String!
     profileFields: [ProfileField]!
+  }
+
+  type RequestResponse implements MutationResponse {
+    code: Int!
+    success: Boolean!
+    message: String!
+    request: Request!
   }
 `;
 

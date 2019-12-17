@@ -55,9 +55,14 @@ function getUser(token) {
 }
 
 // the function that sets up the global context for each resolver, using the req
-const context = async ({ req }) => ({
-  ...await getUser(req.headers.authorization)
-});
+
+const context = async ({ req, connection }) => {
+  if (connection) {
+    return connection.context;
+  } else ({
+    ...await getUser(req.headers.authorization)
+  });
+}
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
@@ -66,6 +71,21 @@ const server = new ApolloServer({
   resolvers,
   dataSources,
   context,
+  // subscriptions: {
+  //   onConnect: (connectionParams, webSocket) => {
+  //     if (connectionParams.authToken) {
+  //       return validateToken(connectionParams.authToken)
+  //         .then(findUser(connectionParams.authToken))
+  //         .then(user => {
+  //           return {
+  //             currentUser: user,
+  //           };
+  //         });
+  //     }
+
+  //     throw new Error('Missing auth token!');
+  //   },
+  // },
   engine: {
     apiKey: process.env.ENGINE_API_KEY,
     schemaTag: process.env.ENGINE_SCHEMA_TAG
